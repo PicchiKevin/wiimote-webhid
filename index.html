@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wiimote for the Web</title>
+    <link rel="stylesheet" href="assets/style.css">
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.0.2/base.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.0.2/components.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.0.2/utilities.css">
+</head>
+<body class="bg-gray-200">
+    <div class="py-20 text-center text-black">
+        <h1 class="text-4xl">Wiimote for the Web</h1>
+        <h2>A Wiimote implementation using <a class="text-blue-600 hover:text-blue-900 underline" href="https://wicg.github.io/webhid/">WebHID API</a> by <a class="text-blue-600 hover:text-blue-900 underline" href="https://twitter.com/KevinPicchi">@KevinPicchi</a></h2>
+        <h2>Check the source code on <a class="text-blue-600 hover:text-blue-900 underline pb-20" href="https://github.com/KevinPicchi/wiimote-webhid">Github</a></h2>
+    </div>
+
+    <div id="instructions" class="max-w-4xl mx-auto px-8 py-4 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+        <h1 class="my-4 font-big text-bold underline text-3xl">Step 1</h1>
+        <p class="my-2">Enable WebHID (available from chrome 68 by enabling the flag #enable-experimental-web-platform-features at chrome://flags)</p>
+        <p class="my-2">Then pair your WiiMote on your computer using Bluetooth (tap the sync button that is hidden next to the battery)</p>
+        <p class="my-2">Click button bellow and have fun!</p>
+        <div class="flex justify-center items-center">
+            <button id="request-hid-device" class="my-2 py-2 px-4 capitalize bg-blue-600 dark:bg-gray-800 text-white rounded hover:bg-blue-500 dark:hover:bg-gray-700 focus:outline-none focus:bg-blue-500 dark:focus:bg-gray-700 flex">Connect new WiiMote</button>
+        </div>
+    </div>
+
+    <div id="Controls" class="hidden">
+        <div class="mt-2 max-w-4xl mx-auto px-8 py-4 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+            <h1 class="my-4 font-big text-bold underline text-3xl">Controls</h1>
+            <button id="rumble" class="my-2 py-2 px-4 capitalize bg-blue-600 dark:bg-gray-800 text-white rounded hover:bg-blue-500 dark:hover:bg-gray-700 focus:outline-none focus:bg-blue-500 dark:focus:bg-gray-700">
+                Toggle Rumbling
+            </button>
+            <h3 class="my-4 font-big text-2xl">LEDS</h3>
+            <div class="flex flex-wrap	">
+                <button id="led1" class="my-2 mr-4 py-2 px-4 capitalize bg-blue-600 dark:bg-gray-800 text-white rounded hover:bg-blue-500 dark:hover:bg-gray-700 focus:outline-none focus:bg-blue-500 dark:focus:bg-gray-700">
+                    Toggle LED 1
+                </button>
+                <button id="led2" class="my-2 mr-4 py-2 px-4 capitalize bg-blue-600 dark:bg-gray-800 text-white rounded hover:bg-blue-500 dark:hover:bg-gray-700 focus:outline-none focus:bg-blue-500 dark:focus:bg-gray-700">
+                    Toggle LED 2
+                </button>
+                <button id="led3" class="my-2 mr-4 py-2 px-4 capitalize bg-blue-600 dark:bg-gray-800 text-white rounded hover:bg-blue-500 dark:hover:bg-gray-700 focus:outline-none focus:bg-blue-500 dark:focus:bg-gray-700">
+                    Toggle LED 3
+                </button>
+                <button id="led4" class="my-2 mr-4 py-2 px-4 capitalize bg-blue-600 dark:bg-gray-800 text-white rounded hover:bg-blue-500 dark:hover:bg-gray-700 focus:outline-none focus:bg-blue-500 dark:focus:bg-gray-700">
+                    Toggle LED 4
+                </button>
+            </div>
+        </div>
+
+        <div class="mt-2 max-w-4xl mx-auto px-8 py-4 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+            <h3 class="my-4 font-big text-2xl">IR Settings</h3>
+            <div class="flex flex-wrap">
+                <button id="irbasic" class="my-2 mr-4 py-2 px-4 capitalize bg-blue-600 dark:bg-gray-800 text-white rounded hover:bg-blue-500 dark:hover:bg-gray-700 focus:outline-none focus:bg-blue-500 dark:focus:bg-gray-700">
+                    Basic <span class="text-xs">(not fully supported)</span>
+                </button>
+                <button id="irextended" class="my-2 mr-4 py-2 px-4 capitalize bg-blue-600 dark:bg-gray-800 text-white rounded hover:bg-blue-500 dark:hover:bg-gray-700 focus:outline-none focus:bg-blue-500 dark:focus:bg-gray-700">
+                    Extended
+                </button>
+                <button id="irfull" class="my-2 mr-4 py-2 px-4 capitalize bg-blue-600 dark:bg-gray-800 text-white rounded hover:bg-blue-500 dark:hover:bg-gray-700 focus:outline-none focus:bg-blue-500 dark:focus:bg-gray-700">
+                    FULL <span class="text-xs">(not fully supported)</span>
+                </button>
+            </div>
+
+            <h3 class="my-4 font-big text-2xl">Data mode</h3>
+            <div class="flex flex-wrap">
+                <button id="coreBtns" class="my-2 mr-4 py-2 px-4 capitalize bg-blue-600 dark:bg-gray-800 text-white rounded hover:bg-blue-500 dark:hover:bg-gray-700 focus:outline-none focus:bg-blue-500 dark:focus:bg-gray-700">
+                    Core Buttons
+                </button>
+                <button id="coreBtnsACC" class="my-2 mr-4 py-2 px-4 capitalize bg-blue-600 dark:bg-gray-800 text-white rounded hover:bg-blue-500 dark:hover:bg-gray-700 focus:outline-none focus:bg-blue-500 dark:focus:bg-gray-700">
+                    Core Buttons + Accelerometer
+                </button>
+                <button id="coreBtnsACCIR" class="my-2 mr-4 py-2 px-4 capitalize bg-blue-600 dark:bg-gray-800 text-white rounded hover:bg-blue-500 dark:hover:bg-gray-700 focus:outline-none focus:bg-blue-500 dark:focus:bg-gray-700">
+                    Core Buttons + Accelerometer + IR
+                </button>
+            </div>
+        </div>
+
+        <div class="mt-2 max-w-4xl mx-auto px-8 py-4 bg-white dark:bg-gray-800 rounded-lg shadow-md flex justify-around">
+            <div>
+                <h3 class="my-4 font-big text-2xl">Buttons</h3>
+                <pre id="buttons"></pre>
+            </div>
+            <div>
+                <h3 class="my-4 font-big text-2xl">Accelerometer</h3>
+                <ul>
+                    <li>
+                        <b>X: </b> <span id="accX"></span>
+                    </li>
+                    <li>
+                        <b>Y: </b> <span id="accY"></span>
+                    </li>
+                    <li>
+                        <b>Z: </b> <span id="accZ"></span>
+                    </li>
+                </ul>
+            </div>
+            </div>
+
+        <div class="mt-2 max-w-4xl mx-auto px-8 py-4 bg-white dark:bg-gray-800 rounded-lg shadow-md align-center">
+            <h3>IR (canvas)</h3>
+            <canvas style="width: 100%; height: 500px;" id="IRcanvas"></canvas>
+            <pre id="IRdebug"></pre>
+        </div>
+
+    </div>
+
+</body>
+<script type="module" src="index.js"></script>
+</html>
