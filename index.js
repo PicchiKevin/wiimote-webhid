@@ -54,10 +54,6 @@ function initButtons() {
     () => wiimote.initiateIR(IRDataType.FULL)
   )
 
-  setButton( "test",
-    () => wiimote.test()
-  )
-
   setButton( "coreBtns",
     () => wiimote.setDataTracking(DataReportMode.CORE_BUTTONS)
   )
