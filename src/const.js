@@ -15,6 +15,7 @@ export const ReportMode = {
 export const DataReportMode = {
     CORE_BUTTONS: 0x30,
     CORE_BUTTONS_AND_ACCEL: 0x31,
+    EXTENSION_8BYTES: 0x32,
     CORE_BUTTONS_ACCEL_IR: 0x33
 }
 
@@ -80,4 +81,11 @@ export const IRSensitivity = {
     BLOCK_3: [0x63, 0x03],
     BLOCK_4: [0x35, 0x03],
     BLOCK_5: [0x1f, 0x03],
+}
+
+export const WiiBalanceBoardPositions = {
+  TOP_RIGHT: 0,
+  BOTTOM_RIGHT: 1,
+  TOP_LEFT: 2,
+  BOTTOM_LEFT: 3,
 }

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wii Balance Board for the Web</title>
+    <link
+      href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.0.2/base.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.0.2/components.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.0.2/utilities.css"
+    />
+  </head>
+  <body class="bg-gray-200">
+    <div class="py-20 text-center text-black">
+      <h1 class="text-4xl">Wii Balance Board for the Web</h1>
+      <h2>
+        A Wii Balance Board implementation using
+        <a
+          class="text-blue-600 hover:text-blue-900 underline"
+          href="https://wicg.github.io/webhid/"
+          >WebHID API</a
+        >
+        by
+        <a
+          class="text-blue-600 hover:text-blue-900 underline"
+          href="https://twitter.com/KevinPicchi"
+          >@KevinPicchi</a
+        >
+        and
+        <a
+          class="text-blue-600 hover:text-blue-900 underline"
+          href="https://twitter.com/ConcreteSciFi"
+          >@ConcreteSciFi</a
+        >
+      </h2>
+      <h2>
+        Check the source code on
+        <a
+          class="text-blue-600 hover:text-blue-900 underline pb-20"
+          href="https://github.com/PicchiKevin/wiimote-webhid"
+          >Github</a
+        >
+      </h2>
+    </div>
+
+    <div
+      id="instructions"
+      class="max-w-4xl mx-auto px-8 py-4 bg-white dark:bg-gray-800 rounded-lg shadow-md"
+    >
+      <h1 class="my-4 font-big text-bold underline text-3xl">Step 1</h1>
+      <p class="my-2">
+        Enable WebHID (available from chrome 85 by enabling the flag
+        #enable-experimental-web-platform-features at chrome://flags)
+      </p>
+      <p class="my-2">
+        Then pair your Wii Balance Board on your computer using Bluetooth (tap
+        the sync button that is hidden next to the battery)
+      </p>
+      <p class="my-2">Click button bellow and have fun!</p>
+      <div class="flex justify-center items-center">
+        <button
+          id="request-hid-device"
+          class="my-2 py-2 px-4 capitalize bg-blue-600 dark:bg-gray-800 text-white rounded hover:bg-blue-500 dark:hover:bg-gray-700 focus:outline-none focus:bg-blue-500 dark:focus:bg-gray-700 flex"
+        >
+          Connect new Wii Balance Board
+        </button>
+      </div>
+    </div>
+
+    <div id="Controls" class="hidden">
+      <div
+        class="mt-2 max-w-4xl mx-auto px-8 py-4 bg-white dark:bg-gray-800 rounded-lg shadow-md"
+      >
+        <h1 class="my-4 font-big text-bold underline text-3xl">Controls</h1>
+        <h3 class="my-4 font-big text-2xl">LEDS</h3>
+        <div class="flex flex-wrap	">
+          <button
+            id="led1"
+            class="my-2 mr-4 py-2 px-4 capitalize bg-blue-600 dark:bg-gray-800 text-white rounded hover:bg-blue-500 dark:hover:bg-gray-700 focus:outline-none focus:bg-blue-500 dark:focus:bg-gray-700"
+          >
+            Toggle LED 1
+          </button>
+        </div>
+      </div>
+
+      <div
+        class="mt-2 max-w-4xl mx-auto px-8 py-4 bg-white dark:bg-gray-800 rounded-lg shadow-md flex justify-around"
+      >
+        <div>
+          <h3 class="my-4 font-big text-2xl">Buttons</h3>
+          <pre id="buttons"></pre>
+        </div>
+        <div>
+          <h3 class="my-4 font-big text-2xl">Weight (kg)</h3>
+          <ul>
+            <pre id="weights"></pre>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div id="WeightsViz" class="hidden">
+      <div
+        class="mt-2 max-w-4xl mx-auto px-8 py-4 bg-white dark:bg-gray-800 rounded-lg shadow-md flex justify-around"
+      >
+        <div>
+          <h3 class="my-4 font-big text-2xl">Weight Viz</h3>
+          <style>
+            #weightViz > div {
+              opacity: 0;
+              background-color: green;
+            }
+          </style>
+          <div id="weightViz" style="display: grid;
+              grid-template-rows: 50% 50%;
+              grid-template-columns: 50% 50%;
+              width: 600px;
+              height: 350px;">
+            <div id="TOP_LEFT"></div>
+            <div id="TOP_RIGHT"></div>
+            <div id="BOTTOM_LEFT"></div>
+            <div id="BOTTOM_RIGHT"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script type="module" src="wiibalanceboard/index.js"></script>
+</html>
